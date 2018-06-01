@@ -1,0 +1,85 @@
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<meta name="google-signin-client_id" content="367164179713-o2vp44qfh28frcoe8mla19tm5lo7p9iq.apps.googleusercontent.com">
+<div class="text-center">
+  <h2>Log in</h2>
+<div class="row">
+  <div class="col-md-4 col-sm-4 col-xs-4">
+  </div>
+  <div class="col-md-4 col-sm-4 col-xs-4">
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <div class="field">
+        <%= f.label :email %><br />
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
+      </div>
+
+      <div class="field">
+        <%= f.label :password %><br />
+        <%= f.password_field :password, autocomplete: "off", class: "form-control" %>
+      </div>
+
+      <% if devise_mapping.rememberable? -%>
+        <div class="field">
+          <%= f.check_box :remember_me %>
+          <%= f.label :remember_me %>
+        </div>
+      <% end -%>
+
+      <div class="actions">
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+        <%= f.submit "Log in", class: "form-control" %>
+      </div>
+    <% end %>
+  </div>  
+  <div class="col-md-4 col-sm-4 col-xs-4">
+  </div>
+</div>
+  
+
+  <%= render "devise/shared/links" %>
+</div>
+<script type="text/javascript">
+  function onSignIn(googleUser) {
+  var profile = googleUser.getBasicProfile();
+  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+  console.log('Name: ' + profile.getName());
+  console.log('Image URL: ' + profile.getImageUrl());
+  console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+  var data = {
+    "name":  profile.getName(),
+    "email": profile.getEmail(),
+    "google_token":  profile.getId()
+  }
+  var settings = {
+  "async": true,
+  "crossDomain": true,
+  "url": "http://localhost:3000",
+  "method": "POST",
+  "headers": {
+    "content-type": "application/json",
+    "cache-control": "no-cache",
+    "postman-token": "357a4cce-6ab1-b993-763d-9e5308ca52f9"
+  },
+  "processData": false,
+  "data": data.to_json
+}
+
+$.ajax(settings).done(function (response) {
+  console.log(response);
+});
+}
+
+
+
+
+</script>
+
+<a href="#" onclick="signOut();">Sign out</a>
+<script>
+  function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
+  }
+</script>
+

@@ -1,0 +1,32 @@
+<%= form_with(model: appointment, local: true) do |form| %>
+  <% if appointment.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(appointment.errors.count, "error") %> prohibited this appointment from being saved:</h2>
+
+      <ul>
+      <% appointment.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :doctor_name %>
+    <%=select_tag "appointment[doctor_id]", options_for_select(@doctor),{:prompt => "Select Doctor",:class => 'form-control'} %>
+  </div>
+
+  <div class="field">
+    <%= form.label :patient_name %>
+    <%=select_tag "appointment[patient_id]", options_for_select(@patient),{:prompt => "Select Patient",:class => 'form-control'} %>
+  </div>
+
+  <div class="field">
+    <%= form.label :disease %>
+    <%= form.text_field :disease, id: :appointment_disease %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
